@@ -1,0 +1,42 @@
+--Create the sf_tuts database
+CREATE OR REPLACE DATABASE sf_tuts;
+--this prompt shows the current database and schema
+SELECT CURRENT_DATABASE(), CURRENT_SCHEMA();
+--this prompt creates a table
+CREATE OR REPLACE TABLE emp_basic (
+   first_name STRING ,
+   last_name STRING ,
+   email STRING ,
+   streetaddress STRING ,
+   city STRING ,
+   start_date DATE
+   );
+--this prompt creates a warehouse 
+CREATE OR REPLACE WAREHOUSE sf_tuts_wh WITH
+   WAREHOUSE_SIZE='X-SMALL'
+   AUTO_SUSPEND = 180
+   AUTO_RESUME = TRUE
+   INITIALLY_SUSPENDED=TRUE;
+--this prompt shows the current warehouse
+SELECT CURRENT_WAREHOUSE();
+--this prompt puts the file in a stage
+PUT file://C:\temp\employees0*.csv @sf_tuts.public.%emp_basic;
+--this prompt lists what is in the stage
+LIST @sf_tuts.public.%emp_basic;
+--this prompt copy the file from stage to table
+COPY INTO emp_basic
+  FROM @%emp_basic
+  FILE_FORMAT = (type = csv field_optionally_enclosed_by='"')
+  PATTERN = '.*employees0[1-5].csv.gz'
+  ON_ERROR = 'skip_file';
+--this prompt shows the table emp_basic
+SELECT * FROM emp_basic;
+--this prompt adds data to emp_basic table
+INSERT INTO emp_basic VALUES
+   ('Clementine','Adamou','cadamou@sf_tuts.com','10510 Sachs Road','Klenak','2017-9-22') ,
+   ('Marlowe','De Anesy','madamouc@sf_tuts.co.uk','36768 Northfield Plaza','Fangshan','2017-1-26');
+--this prompt shows the result of emails from emp_basic with .uk at the end
+SELECT email FROM emp_basic WHERE email LIKE '%.uk';
+--this prompt shows the first_name,last_name,and the dateadd Filter the list by employees whose start date occurred earlier than January 1, 2017
+SELECT first_name, last_name, DATEADD('day',90,start_date) FROM emp_basic WHERE start_date <= '2017-01-01';
+
