@@ -1,3 +1,5 @@
+--this prompt uses the selected default schema
+use schema public;
 --Create the sf_tuts database
 CREATE OR REPLACE DATABASE sf_tuts;
 --this prompt shows the current database and schema
@@ -19,8 +21,14 @@ CREATE OR REPLACE WAREHOUSE sf_tuts_wh WITH
    INITIALLY_SUSPENDED=TRUE;
 --this prompt shows the current warehouse
 SELECT CURRENT_WAREHOUSE();
+--this prompt creates a stage;
+CREATE OR REPLACE STAGE sf_tuts;
 --this prompt puts the file in a stage
-PUT file://C:\temp\employees0*.csv @sf_tuts.public.%emp_basic;
+PUT file://C:\Users\hp\Desktop\csvv\employees01*.csv @sf_tuts.public.%emp_basic;
+PUT file://C:\Users\hp\Desktop\csvv\employees02*.csv @sf_tuts.public.%emp_basic;
+PUT file://C:\Users\hp\Desktop\csvv\employees03*.csv @sf_tuts.public.%emp_basic;
+PUT file://C:\Users\hp\Desktop\csvv\employees04*.csv @sf_tuts.public.%emp_basic;
+PUT file://C:\Users\hp\Desktop\csvv\employees05*.csv @sf_tuts.public.%emp_basic;
 --this prompt lists what is in the stage
 LIST @sf_tuts.public.%emp_basic;
 --this prompt copy the file from stage to table
