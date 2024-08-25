@@ -1,0 +1,31 @@
+USE ROLE USERADMIN;
+--this promt creates a user with all available details
+CREATE OR REPLACE USER davina  -- adjust user name
+PASSWORD = 'David...1' -- add a secure password
+LOGIN_NAME = 'davina' -- add a login name
+FIRST_NAME = 'jude' -- add user's first name
+LAST_NAME = 'davina' -- add user's last name
+EMAIL = 'davina12@gmail.com' -- add user's email 
+MUST_CHANGE_PASSWORD = true -- ensures a password reset on first login
+DEFAULT_WAREHOUSE = COMPUTE_WH; -- set default warehouse to COMPUTE_WH
+
+--this prompt with the User created, let's use our SECURITYADMIN role to grant the SYSADMIN role and COMPUTE_WH warehouse to it
+USE ROLE SECURITYADMIN;
+
+--this prompt grants role SYSADMIN to our User
+GRANT ROLE SYSADMIN TO USER davina;
+
+--this prompt grants usage on the COMPUTE_WH warehouse to our SYSADMIN role
+GRANT USAGE ON WAREHOUSE COMPUTE_WH TO ROLE SYSADMIN;
+
+--let's now explore all users and roles in our account using our ACCOUNTADMIN role
+USE ROLE ACCOUNTADMIN;
+
+--this prompt shows all users in account
+SHOW USERS;
+
+-- this prompt shows all roles in account
+SHOW ROLES;
+
+--this prompt drops the user
+DROP USER davina;
